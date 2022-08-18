@@ -1,0 +1,182 @@
+***********************TestNG*************************
+Assertions:
+we are not using if else condition because even if the test case fails (i.e the condition doesn't pass in if)
+the testNG will still show it has passed
+in order to overcome that we use
+Assertions from testNG
+the library is Assert,
+and we call different types of assertions from it
+
+first assertion that we learned is
+1.Assert.AssertEquals(String , String)
+it compares two strings if they are equal test case passed else fails.
+
+2.Assert.AssetTrue(boolean)-->if the boolean is True the Assertion will pass
+								if the boolean is false the assertion will fail
+
+WHEN YOU HAVE ONLY ONE TEST HARD ASSERTION WORKS JUST FINE, ON THE OTHER HAND WHEN YOU HAVE MORE THAN ONE TEST
+SOFT ASSERTIONS IS THE BEST APPROACH, SOFT.ASSERTALL(); MUST BE INCLUDE
+
+1.HardAssertions
+As soon as any assertion FAIlS it doesn't check for other assertions, marks the test as failed and quits.
+
+
+Assert.Assertequals(Expected value,Actual Value)-->if they are equal your test case will pass
+`												--> if they are not equal your test case is going to FAIL
+
+
+
+2.SoftAssertions:
+
+Soft assertion will execute all assertions that are there despite the fact that they FAIL or PASS
+and once it has evaluated them all then it will mark the test case as
+Failed or Passed
+(it marks it failed even if one assertion has failed)
+
+The advantage of using soft assert is that we can
+see what errors we are having in other assertions that we make in the same test case,
+but we can't see them if we use hard-assertion as IT WILL EXIT AS SOON AS THE FIRST ASSERTION FAILS
+
+method to implement:
+1. declare the instance
+softAssert soft =new softAssert();
+2.make assertions
+
+soft.assertEquals();
+
+3. at the end of making all assertions
+you must do in order to make the decision at the end.
+soft.assertALL()
+
+this evaluates weather the test case has to be marked passed or failed
+
+
+
+
+
+---------------------------------
+Enable Disable
+@Test (enable-false)--> THIS TAG MEANS-> DO NOT RUN THIS TEST
+public void test1(){
+sout
+}
+
+
+DependsOn
+@Test(dependnsOnMethod="login")->login is just a name of a method
+public void test2(){
+sout
+}
+IF LOGIN FAILS THE CODE THAT DEPENDS ON THIS WILL BE SKIPPED, IN THIS EXAMPLE TEST2 DEPENDS ON LOGIN
+MEANING IF LOGIN FAILS->TEST2 WILL BE SKIPPED
+
+
+Priority: Usually test s are executed alphabetically, but when you use the priority it will execute fallowing the priority tag.
+          and the secuance of this; example priority =1-> priority =2-> and so on. If you do not have a priority tag mentioned the ones with
+          no priority will execute first alphabetically.
+@Test(priority = 1)
+    public void test3() {
+sout
+}
+
+
+TestNg XMl:
+Gives us the control to decide what to execute from the whole project
+
+
+HOW TO CREATE A XML:
+1) right-click on the class you want-->create testNG XML-->go to PROJECT NAME(SDETBatch13TestNg)/right-click-->reload from disk.
+IMPORTANT!!  WHEN YOU CREATE A XML YOU MUST RENAME IT BEFORE YOU CREATE ANOTHER ONE OTHERWISE IT WILL BE OVERRIDE
+2) GO TO THE NEW XML THAT WAS CREATED--> CLICK ON CODE ON THE TOP OF THE SCREEN-->REFORMAT CODE
+3) Delete everything from <classes> to  </classes> so you can write your own code, we keep <test verbose... and </test>
+
+1. we can decide which package to execute
+2. we can decide which specific class to execute
+3. we can decide which methods to execute
+
+
+
+Task1:classWiseExecution.xml
+Class wise execution of Project suing testNg XML:
+
+
+
+<suite>//THIS HAS A TAG AND IT CAN BE ANY NAME YOU WANT
+    <test >
+
+        <classes>//EVERY <CLASSES> MUST HAVE A CLOSING </CLASSES> only one pair of classes tag and include all the packages and classes inside these tags
+            <class name="class02.enableDisable"></class>//EVERY <CLASS> MUST HAVE A CLOSING </CLASS>
+            <class name="class01.testNGannotations"></class>//"PACKAGE NAME.CLASS NAME"
+            <class name="class02.priority"></class>
+        </classes>
+
+    </test>
+</suite>
+
+
+
+
+Task2:
+Method Wise execution
+
+<suite>
+    <test >
+    		<classes>
+    			<class>
+    		   		<methods>
+                    		<include name="ThirdTest"></include>//"name of the method", must have <include and closing </include>
+                    		<include name="FourthTest"></include>
+                    		<include name="FirstTest"></include>
+                    		<exclude name="SecondTest"></include>//exclude tag, will ignore this method
+                	</methods>
+                </class>
+            </classes>
+
+    </test>
+</suite>
+
+
+Task3: package based Execution: It will run the whole package.
+PACKAGE AND CLASSES ARE IN THE SAME LEVEL; YOU CAN'T HAVE PACKAGE AND THEN CLASSES INSIDE
+PackageWiseExecution.xml
+//right click package-> select create testNG XML-->go to PROJECT NAME(SDETBatch13TestNg)/right-click-->reload from disk.
+
+<suite name="All Test Suite">
+    <test>
+      <packages>
+          <package name="class01"></package>
+      </packages>
+    </test>
+</suite>
+
+
+
+Task4:(groups = "smoke")
+Group based execution
+helps you run batch execution
+e.g. you might want to run all the test cases categorized under smoke testing,
+or you might want to run all test cases under the regression testing,
+or you might want to run all the test cases belonging to log in functionality
+
+Syntax:
+<suite>
+    <test >
+        <groups>//this must be under the test
+            <run>
+                <include name="regression"></include>// ONLY THE TESTS WITH THE TAG NAME regression IN THIS CASE WILL BE EXECUTED
+            </run>
+        </groups>
+        then u define class or package on which you want this to implement
+        <packages>
+            <package name="class02"></package>
+        </packages>
+
+    </test>
+
+</suite>
+
+Note:
+if you have a before or after method annotation associated with
+a particular @test annotation marked with some kind of group
+then you must must must mark you BEFORE AND AFTER method
+to (alwaysRun=ture) SO THE CODE WILL RUN NO MATTER WHAT.
